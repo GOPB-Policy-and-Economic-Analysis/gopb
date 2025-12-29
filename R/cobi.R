@@ -70,6 +70,8 @@
   
 #   mcos %>% d$filter(Category_Desc == "Expendable Receipts")
 
+# # mcos %>% d$filter(Category_Desc == "Expendable Receipts")
+
 
 #' Print a sentence
 #'
