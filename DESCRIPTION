@@ -16,6 +16,7 @@ BugReports: https://github.com/bolos-gopb/gopb/issues
 Imports: 
     dplyr,
     jsonlite,
+    lubridate,
     magrittr,
     tibble,
     utils
