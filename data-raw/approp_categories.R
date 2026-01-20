@@ -1,4 +1,4 @@
-approp_types <- tibble::tribble(
+approp_categories <- tibble::tribble(
   ~Category                               , `COBI Org Alias` , ~Definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ,
   "State Budget"                          , "Not native"     , "These appropriations are what people typically mean when they talk about “the budget”. They sum Operating and Capital Budgets plus Expendable Funds and Accounts, as defined below."                                                                                                                                                                                                                                                                                                                                                                           ,
   "State Fund Expense"                    ,                  ,
@@ -12,4 +12,4 @@ approp_types <- tibble::tribble(
   "Higher Education Budget Reporting"     , "HED"            , "Beginning in FY 2025, the Legislature viewed state support for higher education in context using this roll-up. It adds state support to other higher education resources like federal funds, grants and aid, tuition and fees, and philanthropy. It allows policymakers to see how taxpayer dollars compare to these other sources at various institutions and what those taxpayer funds buy at universities and colleges."                                                                                                                                        ,
 )
 
-usethis::use_data(approp_types, overwrite = TRUE)
+usethis::use_data(approp_categories, overwrite = TRUE)

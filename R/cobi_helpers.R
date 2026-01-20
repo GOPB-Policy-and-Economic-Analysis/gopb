@@ -24,3 +24,14 @@ get_FYs <- function() {
   }
   list(previous = previousFY, current = currentFY)
 }
+
+# checks character parameter types
+char_vector_check <- function(arg, arg_name) {
+  if (!is.null(arg) && (!is.character(arg) || length(arg) < 1)) {
+    rlang::abort(paste0(
+      "`",
+      arg_name,
+      "` must be a non-empty character vector or left NULL."
+    ))
+  }
+}

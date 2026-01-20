@@ -1,1 +1,10 @@
-utils::globalVariables(c("%<>%"))
+utils::globalVariables(c(
+  "%<>%",
+  "FY",
+  "CatType",
+  "Agency",
+  "Line_Item",
+  "Appr_Unit",
+  "Category",
+  "years"
+))
