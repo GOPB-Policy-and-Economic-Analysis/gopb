@@ -6,5 +6,12 @@ utils::globalVariables(c(
   "Line_Item",
   "Appr_Unit",
   "Category",
-  "years"
+  "years",
+  "Agency_Name",
+  "Line_Item_Desc",
+  "Appr_Unit_Desc",
+  "Last_Utilization_FY",
+  "Line_Item_Cat",
+  "Agency_Desc",
+  "sessionFY"
 ))
