@@ -22,6 +22,6 @@ Pull COBI orgs
 \examples{
 orgs <- get_cobi_orgs()
 dhhs_orgs <- get_cobi_orgs(agencies = "250")
-gopb_medicaid_orgs <- get_cobi_orgs(line_items = c("CBAA", "KPBA"))
+medicaid_gopb_orgs <- get_cobi_orgs(line_items = c("CBAA", "KPBA"))
 orgs_2023 <- get_cobi_orgs(2023)
 }

@@ -12,18 +12,25 @@
 #' @examples
 #' orgs <- get_cobi_orgs()
 #' dhhs_orgs <- get_cobi_orgs(agencies = "250")
-#' gopb_medicaid_orgs <- get_cobi_orgs(line_items = c("CBAA", "KPBA"))
+#' medicaid_gopb_orgs <- get_cobi_orgs(line_items = c("CBAA", "KPBA"))
 #' orgs_2023 <- get_cobi_orgs(2023)
 
 get_cobi_orgs <- function(year = NULL, agencies = NULL, line_items = NULL) {
-  # if year is provided as the desired timestamp (this should be less common), pull orgs from indicated fiscal year
+  # ARGUMENT TYPE CHECKS
+
+  # character parameters
+  char_vector_check(agencies, "agencies")
+  char_vector_check(line_items, "line_items")
+
   if (!is.null(year)) {
-    # check year type
+    # year
     if (!is.numeric(year) || length(year) != 1 || any(year %% 1 != 0)) {
       rlang::abort(
         "`year` must be an integer."
       )
     }
+
+    # if year is provided as the desired timestamp (this should be less common), pull orgs from indicated fiscal year
     orgs <- cobi_data_extraction(org_url(year))
 
     orgs %<>% # configure
@@ -95,14 +102,14 @@ get_cobi_approps <- function(
 ) {
   # ARGUMENT TYPE CHECKS
 
-  # check years
+  # years
   if (!is.numeric(years) || length(years) < 1 || any(years %% 1 != 0)) {
     rlang::abort(
       "`years` must be a non-empty vector of integers."
     )
   }
 
-  # character parameter type checks
+  # character parameters
   char_vector_check(agencies, "agencies")
   char_vector_check(line_items, "line_items")
   char_vector_check(appr_units, "appropriation_units")
