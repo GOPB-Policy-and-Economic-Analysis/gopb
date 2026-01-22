@@ -1,13 +1,13 @@
-# ALL OF THESE PULL THE appropriations_data JSON ENDPOINT specifically
+# MORE THAN ONE OF THESE PULL THE appropriations_data JSON ENDPOINT specifically
 # NOT YET PUTTING A LOT OF THIS REPETITIVE CODE INTO ANOTHER FUNCTION LIKE cobi_query() OR SOMETHING UNTIL I CAN SEE WHAT ALL IS TRULY REPRODUCIBLE WITH THE INCLUSION OF THE VARIOUS USES/FILTERS DOWN THE ROAD
 
 #' Pull COBI appropriations
 #'
-#' @param years A vector of integers indicating year(s) of interest
-#' @param agencies A character vector indicating agency(ies) of interest
-#' @param line_items A character vector indicating line item(s) of interest
-#' @param appr_units A character vector indicating appropriation unit(s) of interest
-#' @param financing_sources A character vector indicating financing source(s) of interest
+#' @param years vector of integers indicating year(s) of interest
+#' @param agencies character vector indicating agency(ies) of interest
+#' @param line_items character vector indicating line item(s) of interest
+#' @param appr_units character vector indicating appropriation unit(s) of interest
+#' @param financing_sources character vector indicating financing source(s) of interest
 #'
 #' @returns A tibble (modern data frame)
 #' @export
@@ -66,7 +66,7 @@ get_cobi_approps <- function(
     data %<>% dplyr::filter(Category %in% financing_sources)
   }
 
-  data
+  return(data)
 }
 
 
@@ -96,36 +96,72 @@ cobi_expected_expenditure <- function(years) {
 
 
 cobi_orgs <- function(year = NULL) {
-  # if year is provided (this should be less common), pull orgs from indicated year
+  # if year is provided as the desired timestamp (this should be less common), pull orgs from indicated fiscal year
   if (!is.null(year)) {
-    cobi_data_extraction(org_url(year))
+    return(cobi_data_extraction(org_url(year)))
   }
 
   # if no year provided, return recent orgs by defult
-  FYs <- get_FYs()
-  last_year <- cobi_data_extraction(org_url(FYs$previous))
-  this_year <- cobi_data_extraction(org_url(FYs$current))
-  # this binding order is very important... the preserved year after removing duplicates across both years is the information used to determine current utilization
-  recent_orgs <- dplyr::bind_rows(this_year, last_year)
+  org_FYs <- get_FYs()
 
-  init_url <- appr_url(min(years) - 1)
+  orgs <- purrr::map(org_FYs, org_url) %>%
+    purrr::map(cobi_data_extraction) %>%
+    rev() %>% # this reversed binding order is very important... this preserves the most recent year when later removing duplicates across both years, and is used to determine currency of the utilization
+    dplyr::bind_rows()
 
-  # pull out-year data
-  data <- cobi_data_extraction(init_url)
-
-  # pull normal range
-  for (year in years) {
-    url <- appr_url(year)
-
-    # add to data
-    data <- dplyr::bind_rows(
-      data,
-      cobi_data_extraction(url)
+  # filter, rename, deduplicate, and order
+  orgs %<>% # filter
+    dplyr::filter(
+      Line_Item_Cat %in%
+        c(
+          "RAT",
+          "ERF",
+          "CPF",
+          "PRP",
+          "FID",
+          "GEN",
+          "FRT"
+        )
+    ) %>% # rename
+    dplyr::transmute(
+      Agency_Name = Agency_Desc,
+      Agency = Agency,
+      Line_Item_Desc = Line_Item_Desc,
+      Line_Item = Line_Item,
+      Appr_Unit_Desc = Appr_Unit_Desc,
+      Appr_Unit = Appr_Unit,
+      Last_Utilization_FY = sessionFY
+    ) %>% # deduplicate
+    dplyr::distinct(
+      dplyr::across(
+        -c(
+          Agency_Name,
+          Line_Item_Desc,
+          Appr_Unit_Desc,
+          Last_Utilization_FY
+        )
+      ),
+      .keep_all = TRUE
+    ) %>% # order
+    dplyr::arrange(
+      Agency_Name,
+      Line_Item,
+      Appr_Unit
     )
-  }
 
-  # filter out preceding year and to anticipated expenditures view
-  data %<>%
-    dplyr::filter(FY %in% years) |>
-    dplyr::filter(CatType == 2)
+  return(orgs)
+
+  # loadNamespace("writexl")
+  #
+  # downloads_location <- if (.Platform$OS.type == "windows") {
+  #   file.path(Sys.getenv("USERPROFILE"), "Downloads")
+  # } else {
+  #   file.path(Sys.getenv("HOME"), "Downloads")
+  # }
+
+  # writexl::write_xlsx(
+  #   this_and_last,
+  #   path = file.path(downloads_location, "Current Budget Organization.xlsx")
+  # )
+  # cat("Current Budget Organization saved in Downloads folder.")
 }

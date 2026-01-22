@@ -1,4 +1,4 @@
-cobi_dictionary <- tibble::tribble(
+cobi_approps_dictionary <- tibble::tribble(
   ~Field               , ~Definition                                                                                                                                                                          ,
   "Session"            , "legislative session in which the appropriation was made"                                                                                                                            ,
   "Bill_Number"        , "same as BillNumber, including indication whether subs were made and how many"                                                                                                       ,
@@ -29,4 +29,4 @@ cobi_dictionary <- tibble::tribble(
   "SessionFY"          , "fiscal year in which bill was passed"                                                                                                                                               ,
 )
 
-usethis::use_data(cobi_dictionary, overwrite = TRUE)
+usethis::use_data(cobi_approps_dictionary, overwrite = TRUE)

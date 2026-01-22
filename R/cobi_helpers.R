@@ -1,16 +1,20 @@
 # generates url for designated year appropriations table
 appr_url <- function(year) {
-  paste0("https://le.utah.gov/data/cobi/", year, "_appropriations_data.json")
+  return(paste0(
+    "https://le.utah.gov/data/cobi/",
+    year,
+    "_appropriations_data.json"
+  ))
 }
 
 # generates url for designated year orgs table
 org_url <- function(year) {
-  paste0("https://le.utah.gov/data/cobi/", year, "_orgs.json")
+  return(paste0("https://le.utah.gov/data/cobi/", year, "_orgs.json"))
 }
 
 # pulls data from designated url
 cobi_data_extraction <- function(url) {
-  jsonlite::fromJSON(url)$data |> tibble::as_tibble()
+  return(jsonlite::fromJSON(url)$data |> tibble::as_tibble())
 }
 
 # captures current and previous FY
@@ -22,16 +26,16 @@ get_FYs <- function() {
     previousFY <- lubridate::year(Sys.Date()) - 1
     currentFY <- lubridate::year(Sys.Date())
   }
-  list(previous = previousFY, current = currentFY)
+  return(list(previous = previousFY, current = currentFY))
 }
 
 # checks character parameter types
 char_vector_check <- function(arg, arg_name) {
   if (!is.null(arg) && (!is.character(arg) || length(arg) < 1)) {
-    rlang::abort(paste0(
+    return(rlang::abort(paste0(
       "`",
       arg_name,
       "` must be a non-empty character vector or left NULL."
-    ))
+    )))
   }
 }
