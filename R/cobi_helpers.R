@@ -71,12 +71,15 @@ cobi_data_extraction <- function(url) {
 
 # checks character parameter types
 char_vector_check <- function(arg, arg_name) {
+  # evaluate argument
+  expr <- rlang::enexpr(arg)
+
   if (!is.null(arg) && (!is.character(arg) || length(arg) < 1)) {
-    return(rlang::abort(paste0(
+    rlang::abort(paste0(
       "`",
       arg_name,
       "` must be a non-empty character vector or left NULL."
-    )))
+    ))
   }
 }
 

@@ -23,3 +23,6 @@ Imports:
     rlang,
     tibble,
     writexl
+Depends: 
+    R (>= 3.5)
+LazyData: true
