@@ -71,10 +71,25 @@ cobi_data_extraction <- function(url) {
 
 # checks character parameter types
 char_vector_check <- function(arg, arg_name) {
-  # evaluate argument
-  expr <- rlang::enexpr(arg)
+  # handle unquoted/invalid argument object(s)
+  verified_arg <- tryCatch(
+    {
+      arg
+    },
+    error = function(e) {
+      rlang::abort(paste0(
+        "Invalid argument provided for `",
+        arg_name,
+        "`. Be sure to wrap character-type arguments in quotes."
+      ))
+    }
+  )
 
-  if (!is.null(arg) && (!is.character(arg) || length(arg) < 1)) {
+  # ensure correct type
+  if (
+    !is.null(verified_arg) &&
+      (!is.character(verified_arg) || length(verified_arg) < 1)
+  ) {
     rlang::abort(paste0(
       "`",
       arg_name,
