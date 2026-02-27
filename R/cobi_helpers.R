@@ -54,6 +54,34 @@ configure_org_view <- function(orgs, agencies, line_items) {
   return(orgs)
 }
 
+# configures COBI financing soures view
+configure_financing_sources <- function(financing_sources, restricted_only) {
+  # observe restricted_only directive
+  if (identical(restricted_only, TRUE)) {
+    financing_sources %<>% dplyr::filter(.data$fundHL == "Restricted Funds")
+  }
+
+  financing_sources %<>% # filter to only appropriations financing sources
+    dplyr::filter(.data$CatType == 1) %>% # rename and select --(go through all of these native names and define them with Brian Fay, determining which ones to keep for the office)
+    dplyr::transmute(
+      Source_Code = .data$category,
+      Source_Description = .data$Category_Desc,
+      Is_State_Fund = .data$StateFund,
+      SF_All = .data$SFAll,
+      Source_Rollup = .data$SourceRollupName,
+      Category_Rollup = .data$cat_rollup_desc,
+      Fund_High_Level = .data$fundHL,
+      Last_Utilization_FY = .data$sessionFY
+    )
+
+  return(financing_sources)
+}
+
+# generates url for designated year categories table
+categories_url <- function(year) {
+  return(paste0("https://le.utah.gov/data/cobi/", year, "_categories.json"))
+}
+
 # generates url for designated year appropriations table
 appr_url <- function(year) {
   return(paste0(
