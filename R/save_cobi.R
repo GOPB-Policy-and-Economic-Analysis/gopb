@@ -51,7 +51,7 @@ save_cobi_approps <- function(
   financing_sources = NULL
 ) {
   # retrieve data
-  approps <- get_cobi_approps(
+  approps <- get_cobi_meta_approps(
     years,
     agencies,
     line_items,

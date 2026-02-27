@@ -19,7 +19,7 @@ get_FYs <- function() {
 configure_org_view <- function(orgs, agencies, line_items) {
   orgs %<>% # filter relevant appropriation categories
     dplyr::filter(
-      Line_Item_Cat %in%
+      .data$Line_Item_Cat %in%
         c(
           "RAT",
           "ERF",
@@ -31,24 +31,24 @@ configure_org_view <- function(orgs, agencies, line_items) {
         )
     ) %>% # rename
     dplyr::rename(
-      Agency_Name = Agency_Desc,
-      Last_Utilization_FY = sessionFY
+      Agency_Name = .data$Agency_Desc,
+      Last_Utilization_FY = .data$sessionFY
     ) %>% # select
     dplyr::select(
-      Agency_Name,
-      Agency,
-      Line_Item_Desc,
-      Line_Item,
-      Appr_Unit_Desc,
-      Appr_Unit,
-      Last_Utilization_FY
+      .data$Agency_Name,
+      .data$Agency,
+      .data$Line_Item_Desc,
+      .data$Line_Item,
+      .data$Appr_Unit_Desc,
+      .data$Appr_Unit,
+      .data$Last_Utilization_FY
     )
   # more filtering
   if (!is.null(agencies)) {
-    orgs %<>% dplyr::filter(Agency %in% agencies)
+    orgs %<>% dplyr::filter(.data$Agency %in% agencies)
   }
   if (!is.null(line_items)) {
-    orgs %<>% dplyr::filter(Line_Item %in% line_items)
+    orgs %<>% dplyr::filter(.data$Line_Item %in% line_items)
   }
 
   return(orgs)
