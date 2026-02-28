@@ -138,6 +138,36 @@ get_cobi_financing_sources <- function(
 }
 
 
+#' Pull COBI expenditure categories
+#'
+#' @returns tibble (modern data frame)
+#' @export
+#'
+#' @examples
+#' expenditure_categories <- get_cobi_expenditure_categories()
+
+get_cobi_expenditure_categories <- function() {
+  category_FYs <- get_FYs()
+
+  expenditure_categories <- purrr::map(category_FYs, categories_url) %>%
+    purrr::map(cobi_data_extraction) %>%
+    rev() %>% # this reversed binding order is very important... this preserves the most recent year when later removing duplicates across both years, and is used to determine currency of the utilization
+    dplyr::bind_rows()
+
+  expenditure_categories %<>% # filter to only expenditure categories
+    dplyr::filter(.data$CatType == 2) %>% # rename and select
+    dplyr::transmute(
+      Expenditure_Code = .data$category,
+      Expenditure_Description = .data$Category_Desc,
+      Last_Utilization_FY = .data$sessionFY
+    ) %>% # deduplicate
+    dplyr::distinct(.data$Expenditure_Code, .keep_all = TRUE) %>% # order
+    dplyr::arrange(.data$Expenditure_Code)
+
+  return(expenditure_categories)
+}
+
+
 #' Pull COBI meta appropriations
 #'
 #' @param years vector of integers indicating year(s) of interest
