@@ -227,7 +227,7 @@ get_cobi_meta_approps <- function(
 
   # filter to specified appropriations view
   approps %<>%
-    dplyr::filter(.data$FY %in% years, .data$CatType == 1)
+    dplyr::filter(.data$FY %in% years, .data$CatType == 1) # think this should be dropped and moved to all other necessary functions in order to provide a true raw version of the data (potentially changing this function name?)
 
   if (!is.null(agencies)) {
     approps %<>% dplyr::filter(.data$Agency %in% agencies)
@@ -374,6 +374,48 @@ get_cobi_restricted_transfers <- function(
     )
 
   return(restricted_transfers)
+}
+
+
+#' Get COBI Capital Project Funds
+#'
+#' @param years vector of integers indicating year(s) of interest
+#' @param agencies character vector indicating agency(ies) of interest
+#' @param line_items character vector indicating line item(s) of interest
+#' @param financing_sources character vector indicating financing source(s) of interest
+#' @param is1x boolean value indicating whether amount is one-time
+#'
+#' @returns tibble (modern data frame)
+#' @export
+#'
+#' @examples
+#' capital_project_funds <- get_cobi_cpf(c(2025, 2026))
+#' capital_budget_itf <- get_cobi_cpf(years = 2025, agencies = '102', financing_sources = '2480')
+#' transit_fund <- get_cobi_cpf(years = 2025, line_items = '2915')
+
+get_cobi_cpf <- function(
+  years,
+  agencies = NULL,
+  line_items = NULL,
+  financing_sources = NULL,
+  is1x = NULL
+) {
+  # retrieve data
+  approps <- get_cobi_meta_approps(
+    years,
+    agencies,
+    line_items,
+    financing_sources = financing_sources,
+    is1x = is1x
+  )
+
+  # filter to Capital Project Funds view
+  capital_project_funds <- approps |>
+    dplyr::filter(
+      .data$Line_Item_Cat_Desc == 'Capital Project Funds'
+    )
+
+  return(capital_project_funds)
 }
 
 
