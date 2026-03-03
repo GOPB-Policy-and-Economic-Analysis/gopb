@@ -15,7 +15,7 @@ get_cobi_state_fund_withdrawal(years, is1x = NULL)
 tibble (modern data frame)
 }
 \description{
-Get COBI State Fund Withdrawal
+This returns all appropriations made from unrestricted 'State Funds' including General Fund (1000), Income Tax Fund (2480), and Uniform School Fund (2400).
 }
 \examples{
 state_fund_withdrawal <- get_cobi_state_fund_withdrawal(2025)

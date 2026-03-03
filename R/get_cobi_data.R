@@ -141,30 +141,44 @@ get_cobi_state_budget <- function(
 }
 
 
-#' Get COBI State Fund Withdrawal
+#' Get COBI Business-like Activities
 #'
 #' @param years vector of integers indicating year(s) of interest
+#' @param agencies character vector indicating agency(ies) of interest
+#' @param line_items character vector indicating line item(s) of interest
+#' @param financing_sources character vector indicating financing source(s) of interest
 #' @param is1x boolean value indicating whether amount is one-time
 #'
 #' @returns tibble (modern data frame)
 #' @export
 #'
 #' @examples
-#' state_fund_withdrawal <- get_cobi_state_fund_withdrawal(2025)
+#' goeo_federal_bla <- get_cobi_bla(2025, agencies = '063', financing_sources = '9750')
 
-get_cobi_state_fund_withdrawal <- function(years, is1x = NULL) {
+get_cobi_bla <- function(
+  years,
+  agencies = NULL,
+  line_items = NULL,
+  financing_sources = NULL,
+  is1x = NULL
+) {
   # retrieve data
-  cobi_meta <- get_cobi_meta(years, is1x = is1x)
+  cobi_meta <- get_cobi_meta(
+    years,
+    agencies,
+    line_items,
+    categories = financing_sources,
+    is1x = is1x
+  )
 
-  # filter to State Fund Expense view
-  state_fund_withdrawal <- cobi_meta |>
+  # filter to Business-like Activities view
+  business_like_activities <- cobi_meta |>
     dplyr::filter(
       .data$CatType == 1,
-      .data$Category %in%
-        c('1000', '2480', '2400')
+      .data$Line_Item_Cat_Desc == 'Business-like Activities'
     )
 
-  return(state_fund_withdrawal)
+  return(business_like_activities)
 }
 
 
@@ -211,6 +225,47 @@ get_cobi_restricted_transfers <- function(
 }
 
 
+#' Get COBI Fiduciary Funds
+#'
+#' @param years vector of integers indicating year(s) of interest
+#' @param agencies character vector indicating agency(ies) of interest
+#' @param line_items character vector indicating line item(s) of interest
+#' @param financing_sources character vector indicating financing source(s) of interest
+#' @param is1x boolean value indicating whether amount is one-time
+#'
+#' @returns tibble (modern data frame)
+#' @export
+#'
+#' @examples
+#' navajo_trust <- get_cobi_fiduciary_funds(2025, line_items = '7208')
+
+get_cobi_fiduciary_funds <- function(
+  years,
+  agencies = NULL,
+  line_items = NULL,
+  financing_sources = NULL,
+  is1x = NULL
+) {
+  # retrieve data
+  cobi_meta <- get_cobi_meta(
+    years,
+    agencies,
+    line_items,
+    categories = financing_sources,
+    is1x = is1x
+  )
+
+  # filter to Fiduciary Funds view
+  fiduciary_funds <- cobi_meta |>
+    dplyr::filter(
+      .data$CatType == 1,
+      .data$Line_Item_Cat_Desc == 'Fiduciary Funds'
+    )
+
+  return(fiduciary_funds)
+}
+
+
 #' Get COBI Capital Project Funds
 #'
 #' @param years vector of integers indicating year(s) of interest
@@ -254,85 +309,32 @@ get_cobi_cpf <- function(
 }
 
 
-#' Get COBI Fiduciary Funds
+#' Get COBI State Fund Withdrawal
+#'
+#' This returns all appropriations made from unrestricted 'State Funds' including General Fund (1000), Income Tax Fund (2480), and Uniform School Fund (2400).
 #'
 #' @param years vector of integers indicating year(s) of interest
-#' @param agencies character vector indicating agency(ies) of interest
-#' @param line_items character vector indicating line item(s) of interest
-#' @param financing_sources character vector indicating financing source(s) of interest
 #' @param is1x boolean value indicating whether amount is one-time
 #'
 #' @returns tibble (modern data frame)
 #' @export
 #'
 #' @examples
-#' navajo_trust <- get_cobi_fiduciary_funds(2025, line_items = '7208')
+#' state_fund_withdrawal <- get_cobi_state_fund_withdrawal(2025)
 
-get_cobi_fiduciary_funds <- function(
-  years,
-  agencies = NULL,
-  line_items = NULL,
-  financing_sources = NULL,
-  is1x = NULL
-) {
+get_cobi_state_fund_withdrawal <- function(years, is1x = NULL) {
   # retrieve data
-  cobi_meta <- get_cobi_meta(
-    years,
-    agencies,
-    line_items,
-    categories = financing_sources,
-    is1x = is1x
-  )
+  cobi_meta <- get_cobi_meta(years, is1x = is1x)
 
-  # filter to Fiduciary Funds view
-  fiduciary_funds <- cobi_meta |>
+  # filter to State Fund Expense view
+  state_fund_withdrawal <- cobi_meta |>
     dplyr::filter(
       .data$CatType == 1,
-      .data$Line_Item_Cat_Desc == 'Fiduciary Funds'
+      .data$Category %in%
+        c('1000', '2480', '2400')
     )
 
-  return(fiduciary_funds)
-}
-
-
-#' Get COBI Business-like Activities
-#'
-#' @param years vector of integers indicating year(s) of interest
-#' @param agencies character vector indicating agency(ies) of interest
-#' @param line_items character vector indicating line item(s) of interest
-#' @param financing_sources character vector indicating financing source(s) of interest
-#' @param is1x boolean value indicating whether amount is one-time
-#'
-#' @returns tibble (modern data frame)
-#' @export
-#'
-#' @examples
-#' goeo_federal_bla <- get_cobi_bla(2025, agencies = '063', financing_sources = '9750')
-
-get_cobi_bla <- function(
-  years,
-  agencies = NULL,
-  line_items = NULL,
-  financing_sources = NULL,
-  is1x = NULL
-) {
-  # retrieve data
-  cobi_meta <- get_cobi_meta(
-    years,
-    agencies,
-    line_items,
-    categories = financing_sources,
-    is1x = is1x
-  )
-
-  # filter to Fiduciary Funds view
-  business_like_activities <- cobi_meta |>
-    dplyr::filter(
-      .data$CatType == 1,
-      .data$Line_Item_Cat_Desc == 'Business-like Activities'
-    )
-
-  return(business_like_activities)
+  return(state_fund_withdrawal)
 }
 
 
