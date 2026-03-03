@@ -309,9 +309,9 @@ get_cobi_cpf <- function(
 }
 
 
-#' Get COBI State Fund Withdrawal
+#' Get COBI State Funds Withdrawal
 #'
-#' This returns all appropriations made from unrestricted 'State Funds' including General Fund (1000), Income Tax Fund (2480), and Uniform School Fund (2400).
+#' This returns all appropriations made from unrestricted "State Funds" including General Fund (1000), Income Tax Fund (2480), and Uniform School Fund (2400).
 #'
 #' @param years vector of integers indicating year(s) of interest
 #' @param is1x boolean value indicating whether amount is one-time
@@ -320,25 +320,25 @@ get_cobi_cpf <- function(
 #' @export
 #'
 #' @examples
-#' state_fund_withdrawal <- get_cobi_state_fund_withdrawal(2025)
+#' state_funds_withdrawal <- get_cobi_state_funds_withdrawal(2025)
 
-get_cobi_state_fund_withdrawal <- function(years, is1x = NULL) {
+get_cobi_state_funds_withdrawal <- function(years, is1x = NULL) {
   # retrieve data
   cobi_meta <- get_cobi_meta(years, is1x = is1x)
 
-  # filter to State Fund Expense view
-  state_fund_withdrawal <- cobi_meta |>
+  # filter to State Funds Withdrawal view
+  state_funds_withdrawal <- cobi_meta |>
     dplyr::filter(
       .data$CatType == 1,
       .data$Category %in%
         c('1000', '2480', '2400')
     )
 
-  return(state_fund_withdrawal)
+  return(state_funds_withdrawal)
 }
 
 
-#' Get COBI expected expenditures
+#' Get COBI proposed expenditures
 #'
 #' @param years vector of integers indicating year(s) of interest
 #' @param agencies character vector indicating agency(ies) of interest
@@ -351,11 +351,11 @@ get_cobi_state_fund_withdrawal <- function(years, is1x = NULL) {
 #' @export
 #'
 #' @examples
-#' gov_expenditures <- get_cobi_expected_expenditures(c(2025, 2026), agencies = '060')
-#' personnel <- get_cobi_expected_expenditures(years = 2025, expenditure_categories = 'AA')
-#' medicaid_one_time <- get_cobi_expected_expenditures(years = 2025, line_items = 'KPBA', is1x = TRUE)
+#' gov_expenditures <- get_cobi_proposed_expenditures(c(2025, 2026), agencies = '060')
+#' personnel <- get_cobi_proposed_expenditures(years = 2025, expenditure_categories = 'AA')
+#' medicaid_one_time <- get_cobi_proposed_expenditures(years = 2025, line_items = 'KPBA', is1x = TRUE)
 
-get_cobi_expected_expenditures <- function(
+get_cobi_proposed_expenditures <- function(
   years,
   agencies = NULL,
   line_items = NULL,
@@ -373,7 +373,7 @@ get_cobi_expected_expenditures <- function(
     is1x
   )
 
-  # filter to expected expenditure view
+  # filter to proposed expenditure view
   expenditures <- cobi_meta |>
     dplyr::filter(.data$CatType == 2)
 
