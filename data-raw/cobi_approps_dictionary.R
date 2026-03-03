@@ -9,7 +9,7 @@ cobi_approps_dictionary <- tibble::tribble(
   "Agency_Name"        , "group of organizational line items (typically a department or agency)"                                                                                                              ,
   "Line_Item"          , "line item ID (see Line_Item_Desc)"                                                                                                                                                  ,
   "Line_Item_Desc"     , "group of appropriation units to which funding is being appropriated (same as appropriation unit if account/fund)"                                                                   ,
-  "Line_Item_Cat_Desc" , "bill subsection; indicates statutory rules that apply to the appropriation (see approp_categories table)"                                                                           ,
+  "Line_Item_Cat_Desc" , "bill subsection; indicates statutory rules that apply to the appropriation (see cobi_approp_line_categories table)"                                                                 ,
   "Appr_Unit"          , "appropriation unit ID (see Appr_Unit_Desc)"                                                                                                                                         ,
   "Appr_Unit_Desc"     , "destination of appropriated funding; found in bill under 'Schedule of Programs' (same as line item if account/fund)"                                                                ,
   "ItemKey"            , "item ID (see ItemName)"                                                                                                                                                             ,
