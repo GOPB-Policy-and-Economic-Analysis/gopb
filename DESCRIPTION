@@ -1,9 +1,13 @@
 Package: gopb
-Title: GOPB Toolkit
+Title: GOPB Data Toolkit
 Version: 0.0.0.9000
 Authors@R: 
     person("Jackson", "Bolos", , "jjbolos@utah.gov", role = c("aut", "cre"))
-Description: Convenient functions to simplify and streamline common data acquisition, integration, manipulation, visualization, and publishing tasks.
+Description: Internal toolkit offering convenient functions to simplify and streamline
+    common data acquisition and integration tasks
+    in the Utah Governor's Office of Planning & Budget.
+    These include user-friendly interactions with the
+    COBI, Budget Builder, and Vantage systems.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

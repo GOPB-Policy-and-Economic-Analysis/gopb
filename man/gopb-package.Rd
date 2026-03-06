@@ -4,9 +4,9 @@
 \name{gopb-package}
 \alias{gopb}
 \alias{gopb-package}
-\title{gopb: GOPB Toolkit}
+\title{gopb: GOPB Data Toolkit}
 \description{
-Convenient functions to simplify and streamline common data acquisition, integration, manipulation, visualization, and publishing tasks.
+Internal toolkit offering convenient functions to simplify and streamline common data acquisition and integration tasks in the Utah Governor's Office of Planning & Budget. These include user-friendly interactions with the COBI, Budget Builder, and Vantage systems.
 }
 \seealso{
 Useful links:
